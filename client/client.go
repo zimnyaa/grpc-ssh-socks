@@ -65,9 +65,7 @@ func main() {
 			continue
 		}
 		fmt.Println("new direct-tcpip channel")
-		channel, chreqs, _ := newChannel.Accept()
-
-		go ssh.DiscardRequests(chreqs)
+		
 
 		var dReq struct {
 			DestAddr string
@@ -75,19 +73,25 @@ func main() {
 		}
 		ssh.Unmarshal(newChannel.ExtraData(), &dReq)
 
-
-		dest := fmt.Sprintf("%s:%d", dReq.DestAddr, dReq.DestPort)
-		conn, _ := net.Dial("tcp", dest)
-
 		go func() {
-			defer channel.Close()
-			defer conn.Close()
-			io.Copy(channel, conn)
-		}()
-		go func() {
-			defer channel.Close()
-			defer conn.Close()
-			io.Copy(conn, channel)
+			dest := fmt.Sprintf("%s:%d", dReq.DestAddr, dReq.DestPort)
+			conn, err := net.Dial("tcp", dest)
+				
+			if err == nil {
+				channel, chreqs, _ := newChannel.Accept()
+				go ssh.DiscardRequests(chreqs)
+	
+				go func() {
+					defer channel.Close()
+					defer conn.Close()
+					io.Copy(channel, conn)
+				}()
+				go func() {
+					defer channel.Close()
+					defer conn.Close()
+					io.Copy(conn, channel)
+				}()
+			}
 		}()
 	}
 	
