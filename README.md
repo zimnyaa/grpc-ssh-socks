@@ -1,5 +1,9 @@
 # `grpc-ssh-socks`
 ```
+!grpcssh contains a better version of this, with client-side DNS resolution
+and proper concurrent connection support.
+```
+```
 grpc-ssh-socks is a minimal reverse socks proxy
 implementation over gRPC, made to be used as a 
 reference in C2 development. A bidirectional 
