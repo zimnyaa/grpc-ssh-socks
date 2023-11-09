@@ -1,4 +1,4 @@
-# `grpc-ssh-socks`
+# `grpc-ssh-socks` (ABANDONED, please refer to github.com/zimnyaa/grpcssh for the updated version of the implementation.)
 ```
 !grpcssh contains a better version of this, with client-side DNS resolution
 and proper concurrent connection support.
